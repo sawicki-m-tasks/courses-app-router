@@ -1,0 +1,42 @@
+.courseCard {
+  border: 2px solid forestgreen;
+  padding: 20px; 
+  display: flex;
+  flex-direction: row;
+  align-items: baseline;
+  margin-bottom: 30px;
+}
+
+.courseCard:last-child {
+  margin-bottom: unset;
+}
+
+.courseCardDescription {
+  flex: 4 1;
+  margin-right: 30px;
+}
+
+.courseCardDescription h3 {
+  margin-top: 0;
+}
+
+.courseCardDetails {
+  min-width: 0;
+  flex: 2 3;
+  display: flex;
+  flex-direction: column;
+}
+
+.courseCardDetails p {
+  margin-top: 0;
+}
+
+.courseCardDetails button {
+  align-self: center;
+}
+
+.courseCardDetails .authors {
+  overflow: hidden;
+  white-space: nowrap;
+  text-overflow: ellipsis;
+}

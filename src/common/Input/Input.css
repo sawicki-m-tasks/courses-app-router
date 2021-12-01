@@ -1,0 +1,12 @@
+.inputContainer {
+  display: flex;
+  flex-direction: column;
+  height: 100%;
+  width: 100%;
+}
+
+.inputContainer input {
+  border: 2px solid orange;
+  height: 30px;
+  box-sizing: border-box;
+}

@@ -1,0 +1,10 @@
+.searchBar {
+  max-width: 500px;
+  display: flex;
+  flex-direction: row;
+  align-items: center;
+}
+
+.searchBar .inputContainer {
+  margin-right: 10px;
+}

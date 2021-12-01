@@ -1,0 +1,28 @@
+.coursesContainer {
+  border: 2px solid blue;
+  padding: 20px;
+}
+
+.upperSection {
+  display: flex;
+  flex-direction: row;
+  align-items: center;
+  justify-content: space-between;
+  margin-bottom: 25px;
+}
+
+.searchBarContainer {
+  flex: 3;
+}
+
+.newCourseContainer {
+  margin-left: 10px;
+  flex: 1;
+  display: flex;
+  justify-content: flex-end;
+}
+
+.coursesListContainer {
+  display: flex;
+  flex-direction: column;
+}

@@ -1,0 +1,14 @@
+.baseButton {
+  border: 2px solid violet;
+  background-color: transparent;
+  height: 30px;
+  padding: 0 30px;
+}
+.baseButton:hover {
+  cursor: pointer;
+  border-color: darkviolet;
+  background-color: rgba(0, 0, 0, 0.05);
+}
+.baseButton:active {
+  background-color: rgba(0, 0, 0, 0.1);
+}

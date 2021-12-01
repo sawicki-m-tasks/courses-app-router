@@ -1,0 +1,14 @@
+.textareaContainer {
+  display: flex;
+  flex-direction: column;
+  min-height: 150px;
+}
+
+.textareaContainer textarea {
+  border: 2px solid yellow;
+  box-sizing: border-box;
+  height: 100%;
+  width: 100%;
+  max-width: 100%;
+  flex-grow: 1;
+}
