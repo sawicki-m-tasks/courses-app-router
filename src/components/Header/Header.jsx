@@ -1,10 +1,12 @@
 /* eslint-disable no-restricted-syntax */
 /* eslint-disable import/no-extraneous-dependencies */
+import { useContext } from 'react';
 import {
   Outlet,
   useLocation,
   useNavigate,
 } from 'react-router';
+import { AuthContext } from '../../auth/AuthContext';
 import Button from '../../common/Button/Button';
 import { buttonText, localStorageKeys } from '../../constants';
 import Logo from './components/Logo/Logo';
@@ -15,11 +17,13 @@ export default function Header() {
   const { pathname } = useLocation();
   const userName = localStorage.getItem(localStorageKeys.userName) || '';
   const navigate = useNavigate();
+  const loginContext = useContext(AuthContext);
 
   const handleLogout = () => {
     for (const key of Object.values(localStorageKeys)) {
       localStorage.removeItem(key);
     }
+    loginContext.toggle(false);
     navigate('/login');
   };
 

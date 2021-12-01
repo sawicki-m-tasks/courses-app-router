@@ -116,7 +116,7 @@ export default function CreateCourse() {
           <Button buttonText={buttonText.createCourse} onClick={handleCreateCourse} />
         </div>
         <div className='courseDetailsBottom'>
-          <Textarea onChange={handleDescriptionChange} value={description} labelText={inputText.description.label} placeholderText={inputText.description.placeholder} id='courseDescription' />
+          <Textarea onChange={handleDescriptionChange} inputValue={description} labelText={inputText.description.label} placeholderText={inputText.description.placeholder} id='courseDescription' />
         </div>
       </div>
       <div className='authorDetails'>

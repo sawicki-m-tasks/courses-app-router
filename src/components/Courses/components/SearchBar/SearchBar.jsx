@@ -9,7 +9,7 @@ import './SearchBar.css';
 export default function SearchBar(props) {
   return (
     <div className='searchBar'>
-      <Input type='text' onChange={props.onChange} value={props.inputValue} placeholderText={inputText.search.placeholder} labelText={inputText.search.label} />
+      <Input type='text' id='searchbar' onChange={props.onChange} value={props.inputValue} placeholderText={inputText.search.placeholder} labelText={inputText.search.label} />
       <Button buttonText={buttonText.search} onClick={props.onSearch} />
     </div>
   );
