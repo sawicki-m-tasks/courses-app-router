@@ -1,3 +1,4 @@
+import { useContext } from 'react';
 import {
   BrowserRouter,
   Routes,
@@ -14,16 +15,17 @@ import Login from './components/Login/Login';
 import Registration from './components/Registration/Registration';
 import Auth from './auth/Auth';
 import AuthContextProvider from './auth/AuthContextProvider';
-import checkIfUserLogged from './helpers/checkIfUserLogged';
 import LoginAuth from './auth/LoginAuth';
+import { AuthContext } from './auth/AuthContext';
 
 function App() {
+  const loginContext = useContext(AuthContext);
   return (
     <AuthContextProvider>
       <BrowserRouter>
         <Routes>
           <Route path='/' element={<Header />}>
-            <Route index element={checkIfUserLogged() ? <Navigate to='/courses' /> : <Navigate to='/login' />} />
+            <Route index element={loginContext.status ? <Navigate to='/courses' /> : <Navigate to='/login' />} />
             <Route path='registration' element={<Registration />} />
             <Route
               path='login'
