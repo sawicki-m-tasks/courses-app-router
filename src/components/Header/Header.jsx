@@ -3,7 +3,6 @@
 import { useContext } from 'react';
 import {
   Outlet,
-  useLocation,
   useNavigate,
 } from 'react-router';
 import { AuthContext } from '../../auth/AuthContext';
@@ -14,7 +13,6 @@ import Logo from './components/Logo/Logo';
 import './Header.css';
 
 export default function Header() {
-  const { pathname } = useLocation();
   const userName = localStorage.getItem(localStorageKeys.userName) || '';
   const navigate = useNavigate();
   const loginContext = useContext(AuthContext);
@@ -33,7 +31,7 @@ export default function Header() {
         <div className='logo'>
           <Logo />
         </div>
-        {(pathname !== '/login' && pathname !== '/registration')
+        {loginContext.logged
         && (
         <div className='accountDetails'>
           <span>{userName}</span>
