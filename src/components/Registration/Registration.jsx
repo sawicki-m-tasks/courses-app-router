@@ -69,8 +69,8 @@ export default function Registration() {
         <Button type='submit' buttonText={buttonText.register} />
       </form>
       <span>
-        If you have an account, you can
-        <Link to='/login'> login</Link>
+        If you have an account, you can&nbsp;
+        <Link to='/login'>login</Link>
       </span>
     </section>
   );

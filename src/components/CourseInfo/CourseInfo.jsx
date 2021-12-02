@@ -19,19 +19,19 @@ export default function CourseInfo() {
         <div className='courseInfoDetails'>
           <ul>
             <li>
-              <b>ID:</b>
+              <b>ID:&nbsp;</b>
               {course.id}
             </li>
             <li>
-              <b>Duration:</b>
+              <b>Duration:&nbsp;</b>
               {course.duration}
             </li>
             <li>
-              <b>Created: </b>
+              <b>Created:&nbsp;</b>
               {course.creationDate}
             </li>
             <li>
-              <b>Authors:</b>
+              <b>Authors:&nbsp;</b>
               {course.authors.join(', ')}
             </li>
           </ul>

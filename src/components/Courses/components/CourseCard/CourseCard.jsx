@@ -22,16 +22,16 @@ export default function CourseCard(props) {
       </div>
       <div className='courseCardDetails'>
         <p className='authors'>
-          <b>Authors: </b>
+          <b>Authors:&nbsp;</b>
           {props.authors.join(', ')}
         </p>
         <p>
-          <b>Duration: </b>
+          <b>Duration:&nbsp;</b>
           {props.duration}
           hours
         </p>
         <p>
-          <b>Created: </b>
+          <b>Created:&nbsp;</b>
           {props.creationDate.replaceAll('/', '.')}
         </p>
         <Button buttonText={buttonText.showCourse} onClick={showCourseDetails} />
