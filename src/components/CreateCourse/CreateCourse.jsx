@@ -5,7 +5,7 @@
 /* eslint-disable import/no-extraneous-dependencies */
 import { useState } from 'react';
 import { useNavigate } from 'react-router';
-import { v4 as uuidv4 } from 'uuid';
+import { useDispatch, useSelector } from 'react-redux';
 
 import './CreateCourse.css';
 
@@ -13,13 +13,12 @@ import Button from '../../common/Button/Button';
 import Input from '../../common/Input/Input';
 import Textarea from '../../common/Textarea/Textarea';
 import formatDuration from '../../helpers/pipeDuration';
-import generateCurrentDate from '../../helpers/dateGenerator';
 import {
   buttonText,
   inputText,
-  mockedAuthorsList,
-  mockedCoursesList,
 } from '../../constants';
+import { authorAdd } from '../../store/authors/actionCreators';
+import { courseAdd } from '../../store/courses/actionCreators';
 
 export default function CreateCourse() {
   const [selectedAuthorsID, setSelectedAuthorsID] = useState([]);
@@ -28,6 +27,11 @@ export default function CreateCourse() {
   const [title, setTitle] = useState('');
   const [description, setDescription] = useState('');
   const navigate = useNavigate();
+  const dispatch = useDispatch();
+  const authors = useSelector(state => {
+    console.log(state);
+    return state.authors;
+  });
 
   const handleAddAuthor = id => {
     setSelectedAuthorsID([...selectedAuthorsID, id]);
@@ -45,10 +49,7 @@ export default function CreateCourse() {
       return;
     }
 
-    mockedAuthorsList.push({
-      id: uuidv4(),
-      name: authorName,
-    });
+    dispatch(authorAdd(authorName));
 
     setAuthorName('');
   };
@@ -76,14 +77,12 @@ export default function CreateCourse() {
       return;
     }
 
-    mockedCoursesList.push({
-      id: uuidv4(),
+    dispatch(courseAdd({
       title,
       description,
-      creationDate: generateCurrentDate(),
       duration,
       authors: selectedAuthorsID,
-    });
+    }));
 
     clearInputs();
     navigate('/courses');
@@ -138,10 +137,10 @@ export default function CreateCourse() {
         </div>
         <div className='authorDetailsRight'>
           <h3>Authors</h3>
-          {selectedAuthorsID.length === mockedAuthorsList.length
+          {selectedAuthorsID.length === authors.length
             && <span>Author list empty</span>}
           {
-            mockedAuthorsList.map(author => {
+            authors.map(author => {
               if (selectedAuthorsID.indexOf(author.id) === -1) {
                 return (
                   <div key={author.id} authorid={author.id} className='author'>
@@ -156,7 +155,7 @@ export default function CreateCourse() {
           {selectedAuthorsID.length === 0
            && <span>Author list empty</span>}
           {selectedAuthorsID.map(authorID => {
-            const author = mockedAuthorsList.find(auth => auth.id === authorID);
+            const author = authors.find(auth => auth.id === authorID);
             return (
               <div key={author.id} authorid={author.id} className='author'>
                 <span>{author.name}</span>

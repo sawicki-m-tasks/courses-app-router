@@ -1,8 +1,10 @@
+/* eslint-disable no-unused-vars */
 /* eslint-disable consistent-return */
 /* eslint-disable max-len */
 /* eslint-disable array-callback-return */
-import { useState } from 'react';
+import { useEffect, useState } from 'react';
 import { useNavigate } from 'react-router-dom';
+import { useDispatch, useSelector } from 'react-redux';
 
 import './Courses.css';
 
@@ -10,12 +12,28 @@ import CourseCard from './components/CourseCard/CourseCard';
 import SearchBar from './components/SearchBar/SearchBar';
 import Button from '../../common/Button/Button';
 import formatDuration from '../../helpers/pipeDuration';
-import { buttonText, mockedAuthorsList, mockedCoursesList } from '../../constants';
+import { buttonText, mockedAuthorsList } from '../../constants';
+import { fetchCourses, fetchAuthors } from '../../services';
+import { coursesFetched } from '../../store/courses/actionCreators';
+import { authorsFetched } from '../../store/authors/actionCreators';
 
 export default function Courses() {
   const [searchPhrase, setSearchPhrase] = useState('');
   const [inputValue, setInputValue] = useState('');
   const navigate = useNavigate();
+  const dispatch = useDispatch();
+  const coursesList = useSelector(state => state.courses);
+  const authorsList = useSelector(state => state.authors);
+
+  useEffect(() => {
+    async function getData() {
+      const a = await fetchAuthors();
+      dispatch(authorsFetched(a.result));
+      const c = await fetchCourses();
+      dispatch(coursesFetched(c.result));
+    }
+    getData();
+  }, []);
 
   const handleSearchInput = e => {
     setInputValue(e.target.value);
@@ -45,10 +63,11 @@ export default function Courses() {
       <section className='coursesSection'>
         <div className='coursesListContainer'>
           {
-            mockedCoursesList.map(course => {
+            coursesList.map(course => {
+              console.log('course: ', course);
               if (course.title.toLowerCase().includes(searchPhrase) || course.id.toLowerCase().includes(searchPhrase)) {
                 const duration = formatDuration(course.duration);
-                const authors = course.authors.map(id => mockedAuthorsList.find(author => author.id === id).name);
+                const authors = course.authors.map(id => authorsList.find(author => author.id === id).name);
                 return (
                   <CourseCard
                     key={course.id}
@@ -62,6 +81,25 @@ export default function Courses() {
                 );
               }
             })
+          }
+          {
+            // mockedCoursesList.map(course => {
+            //   if (course.title.toLowerCase().includes(searchPhrase) || course.id.toLowerCase().includes(searchPhrase)) {
+            //     const duration = formatDuration(course.duration);
+            //     const authors = course.authors.map(id => mockedAuthorsList.find(author => author.id === id).name);
+            //     return (
+            //       <CourseCard
+            //         key={course.id}
+            //         id={course.id}
+            //         title={course.title}
+            //         duration={duration}
+            //         creationDate={course.creationDate}
+            //         description={course.description}
+            //         authors={authors}
+            //       />
+            //     );
+            //   }
+            // })
           }
         </div>
       </section>
