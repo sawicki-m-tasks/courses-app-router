@@ -1,8 +1,10 @@
+/* eslint-disable no-unused-vars */
 /* eslint-disable consistent-return */
 /* eslint-disable max-len */
 /* eslint-disable array-callback-return */
-import { useState } from 'react';
+import { useEffect, useState } from 'react';
 import { useNavigate } from 'react-router-dom';
+import { useDispatch, useSelector } from 'react-redux';
 
 import './Courses.css';
 
@@ -10,12 +12,33 @@ import CourseCard from './components/CourseCard/CourseCard';
 import SearchBar from './components/SearchBar/SearchBar';
 import Button from '../../common/Button/Button';
 import formatDuration from '../../helpers/pipeDuration';
-import { buttonText, mockedAuthorsList, mockedCoursesList } from '../../constants';
+import { buttonText } from '../../constants';
+import { fetchCourses, fetchAuthors } from '../../services';
+import { coursesFetched } from '../../store/courses/actionCreators';
+import { authorsFetched } from '../../store/authors/actionCreators';
 
 export default function Courses() {
   const [searchPhrase, setSearchPhrase] = useState('');
   const [inputValue, setInputValue] = useState('');
   const navigate = useNavigate();
+  const dispatch = useDispatch();
+  const coursesList = useSelector(state => state.courses);
+  const authorsList = useSelector(state => state.authors);
+
+  useEffect(() => {
+    async function getData() {
+      console.log('courses fetch');
+      if (!authorsList) {
+        const a = await fetchAuthors();
+        dispatch(authorsFetched(a.result));
+      }
+      if (!coursesList) {
+        const c = await fetchCourses();
+        dispatch(coursesFetched(c.result));
+      }
+    }
+    getData();
+  }, []);
 
   const handleSearchInput = e => {
     setInputValue(e.target.value);
@@ -45,10 +68,10 @@ export default function Courses() {
       <section className='coursesSection'>
         <div className='coursesListContainer'>
           {
-            mockedCoursesList.map(course => {
+            coursesList && coursesList.map(course => {
               if (course.title.toLowerCase().includes(searchPhrase) || course.id.toLowerCase().includes(searchPhrase)) {
                 const duration = formatDuration(course.duration);
-                const authors = course.authors.map(id => mockedAuthorsList.find(author => author.id === id).name);
+                const authors = course.authors.map(id => authorsList.find(author => author.id === id).name);
                 return (
                   <CourseCard
                     key={course.id}

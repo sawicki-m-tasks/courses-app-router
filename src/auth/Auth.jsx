@@ -1,12 +1,10 @@
-import { useContext } from 'react';
 import { Navigate } from 'react-router-dom';
 import PropTypes from 'prop-types';
-
-import { AuthContext } from './AuthContext';
+import { useSelector } from 'react-redux';
 
 export default function Auth(props) {
-  const loginContext = useContext(AuthContext);
-  if (!loginContext.logged) {
+  const user = useSelector(state => state.user);
+  if (!user.isAuth) {
     return <Navigate to='/login' />;
   }
   return props.children;

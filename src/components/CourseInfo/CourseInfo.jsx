@@ -1,12 +1,17 @@
+import { useSelector } from 'react-redux';
 import { Link, useParams } from 'react-router-dom';
-
-import getCourseInfo from '../../helpers/getCourseInfo';
+import formatDuration from '../../helpers/pipeDuration';
 
 import './CourseInfo.css';
 
 export default function CourseInfo() {
   const { courseId } = useParams();
-  const course = getCourseInfo(courseId);
+  const course = useSelector(state => (
+    state.courses.find(stateCourse => stateCourse.id === courseId)
+  ));
+  const authors = useSelector(state => (
+    state.authors.filter(author => course.authors.indexOf(author.id) !== -1)
+  ));
 
   return (
     <section className='courseInfo'>
@@ -24,7 +29,8 @@ export default function CourseInfo() {
             </li>
             <li>
               <b>Duration:&nbsp;</b>
-              {course.duration}
+              {formatDuration(course.duration)}
+              &nbsp;hours
             </li>
             <li>
               <b>Created:&nbsp;</b>
@@ -32,7 +38,7 @@ export default function CourseInfo() {
             </li>
             <li>
               <b>Authors:&nbsp;</b>
-              {course.authors.join(', ')}
+              {authors.map(author => author.name).join(', ')}
             </li>
           </ul>
         </div>

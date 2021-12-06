@@ -1,17 +1,24 @@
 /* eslint-disable react/forbid-prop-types */
 import { useNavigate } from 'react-router-dom';
 import PropTypes from 'prop-types';
+import { useDispatch } from 'react-redux';
 
 import Button from '../../../../common/Button/Button';
 import { buttonText } from '../../../../constants';
+import { courseDeleted } from '../../../../store/courses/actionCreators';
 
 import './CourseCard.css';
 
 export default function CourseCard(props) {
   const navigate = useNavigate();
+  const dispatch = useDispatch();
 
   const showCourseDetails = () => {
     navigate(`/courses/${props.id}`);
+  };
+
+  const deleteCourse = () => {
+    dispatch(courseDeleted(props.id));
   };
 
   return (
@@ -28,13 +35,17 @@ export default function CourseCard(props) {
         <p>
           <b>Duration:&nbsp;</b>
           {props.duration}
-          hours
+          &nbsp;hours
         </p>
         <p>
           <b>Created:&nbsp;</b>
           {props.creationDate.replaceAll('/', '.')}
         </p>
-        <Button buttonText={buttonText.showCourse} onClick={showCourseDetails} />
+        <div className='courseCardButtons'>
+          <Button buttonText={buttonText.showCourse} onClick={showCourseDetails} />
+          <Button buttonText='Update' onClick={() => {}} />
+          <Button buttonText='Delete' onClick={deleteCourse} />
+        </div>
       </div>
     </div>
   );

@@ -4,27 +4,10 @@ import { useState } from 'react/cjs/react.development';
 
 import Button from '../../common/Button/Button';
 import Input from '../../common/Input/Input';
-import { inputText, buttonText, serverAddress } from '../../constants';
+import { inputText, buttonText } from '../../constants';
+import { performRegistration } from '../../services';
 
 import './Registration.css';
-
-async function performRegistration(userName, userEmail, userPassword) {
-  const registrationData = {
-    name: userName,
-    email: userEmail,
-    password: userPassword,
-  };
-
-  const response = await fetch(`${serverAddress}/register`, {
-    method: 'POST',
-    headers: {
-      'Content-Type': 'application/json',
-    },
-    body: JSON.stringify(registrationData),
-  });
-  const responseJSON = await response.json();
-  return responseJSON;
-}
 
 export default function Registration() {
   const [userName, setUserName] = useState('');
