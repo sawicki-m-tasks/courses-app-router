@@ -1,4 +1,5 @@
 import { combineReducers, createStore } from 'redux';
+import { composeWithDevTools } from 'redux-devtools-extension';
 
 import authorsReducer from './authors/reducer';
 import usersReducer from './user/reducer';
@@ -9,7 +10,8 @@ const store = createStore(
     authors: authorsReducer,
     user: usersReducer,
     courses: coursesReducer
-  })
+  }),
+  composeWithDevTools()
 )
 
 export default store;
