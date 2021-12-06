@@ -110,6 +110,7 @@ export const inputText = {
 
 export const localStorageKeys = {
   userName: 'courses_app_USERNAME',
+  userEmail: 'courses_app_EMAIL',
   token: 'courses_app_TOKEN',
 };
 

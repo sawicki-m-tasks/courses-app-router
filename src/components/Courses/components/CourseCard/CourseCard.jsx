@@ -5,9 +5,9 @@ import { useDispatch } from 'react-redux';
 
 import Button from '../../../../common/Button/Button';
 import { buttonText } from '../../../../constants';
+import { courseDeleted } from '../../../../store/courses/actionCreators';
 
 import './CourseCard.css';
-import { courseDeleted } from '../../../../store/courses/actionCreators';
 
 export default function CourseCard(props) {
   const navigate = useNavigate();
@@ -35,7 +35,7 @@ export default function CourseCard(props) {
         <p>
           <b>Duration:&nbsp;</b>
           {props.duration}
-          hours
+          &nbsp;hours
         </p>
         <p>
           <b>Created:&nbsp;</b>

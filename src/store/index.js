@@ -7,7 +7,7 @@ import coursesReducer from './courses/reducer';
 const store = createStore(
   combineReducers({
     authors: authorsReducer,
-    users: usersReducer,
+    user: usersReducer,
     courses: coursesReducer
   })
 )
