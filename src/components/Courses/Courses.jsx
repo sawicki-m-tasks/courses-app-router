@@ -12,7 +12,7 @@ import CourseCard from './components/CourseCard/CourseCard';
 import SearchBar from './components/SearchBar/SearchBar';
 import Button from '../../common/Button/Button';
 import formatDuration from '../../helpers/pipeDuration';
-import { buttonText, mockedAuthorsList } from '../../constants';
+import { buttonText } from '../../constants';
 import { fetchCourses, fetchAuthors } from '../../services';
 import { coursesFetched } from '../../store/courses/actionCreators';
 import { authorsFetched } from '../../store/authors/actionCreators';
@@ -27,10 +27,14 @@ export default function Courses() {
 
   useEffect(() => {
     async function getData() {
-      const a = await fetchAuthors();
-      dispatch(authorsFetched(a.result));
-      const c = await fetchCourses();
-      dispatch(coursesFetched(c.result));
+      if (!authorsList) {
+        const a = await fetchAuthors();
+        dispatch(authorsFetched(a.result));
+      }
+      if (!coursesList) {
+        const c = await fetchCourses();
+        dispatch(coursesFetched(c.result));
+      }
     }
     getData();
   }, []);
@@ -63,8 +67,7 @@ export default function Courses() {
       <section className='coursesSection'>
         <div className='coursesListContainer'>
           {
-            coursesList.map(course => {
-              console.log('course: ', course);
+            coursesList && coursesList.map(course => {
               if (course.title.toLowerCase().includes(searchPhrase) || course.id.toLowerCase().includes(searchPhrase)) {
                 const duration = formatDuration(course.duration);
                 const authors = course.authors.map(id => authorsList.find(author => author.id === id).name);
@@ -81,25 +84,6 @@ export default function Courses() {
                 );
               }
             })
-          }
-          {
-            // mockedCoursesList.map(course => {
-            //   if (course.title.toLowerCase().includes(searchPhrase) || course.id.toLowerCase().includes(searchPhrase)) {
-            //     const duration = formatDuration(course.duration);
-            //     const authors = course.authors.map(id => mockedAuthorsList.find(author => author.id === id).name);
-            //     return (
-            //       <CourseCard
-            //         key={course.id}
-            //         id={course.id}
-            //         title={course.title}
-            //         duration={duration}
-            //         creationDate={course.creationDate}
-            //         description={course.description}
-            //         authors={authors}
-            //       />
-            //     );
-            //   }
-            // })
           }
         </div>
       </section>

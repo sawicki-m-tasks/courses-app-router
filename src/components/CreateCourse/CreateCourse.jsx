@@ -28,10 +28,7 @@ export default function CreateCourse() {
   const [description, setDescription] = useState('');
   const navigate = useNavigate();
   const dispatch = useDispatch();
-  const authors = useSelector(state => {
-    console.log(state);
-    return state.authors;
-  });
+  const authors = useSelector(state => state.authors);
 
   const handleAddAuthor = id => {
     setSelectedAuthorsID([...selectedAuthorsID, id]);

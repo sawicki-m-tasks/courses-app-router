@@ -1,13 +1,15 @@
+/* eslint-disable no-unused-vars */
 /* eslint-disable no-restricted-syntax */
 /* eslint-disable import/no-extraneous-dependencies */
 import { useContext } from 'react';
+import { useDispatch, useSelector } from 'react-redux';
 import {
   Outlet,
   useNavigate,
 } from 'react-router';
-import { AuthContext } from '../../auth/AuthContext';
 import Button from '../../common/Button/Button';
 import { buttonText, localStorageKeys } from '../../constants';
+import { userLogout } from '../../store/user/actionCreators';
 import Logo from './components/Logo/Logo';
 
 import './Header.css';
@@ -15,13 +17,14 @@ import './Header.css';
 export default function Header() {
   const userName = localStorage.getItem(localStorageKeys.userName) || '';
   const navigate = useNavigate();
-  const loginContext = useContext(AuthContext);
+  const user = useSelector(state => state.user);
+  const dispatch = useDispatch();
 
   const handleLogout = () => {
     for (const key of Object.values(localStorageKeys)) {
       localStorage.removeItem(key);
     }
-    loginContext.toggle(false);
+    dispatch(userLogout());
     navigate('/login');
   };
 
@@ -31,7 +34,7 @@ export default function Header() {
         <div className='logo'>
           <Logo />
         </div>
-        {loginContext.logged
+        {user.isAuth
         && (
         <div className='accountDetails'>
           <span>{userName}</span>

@@ -1,7 +1,7 @@
 /* eslint-disable no-alert */
+import { useDispatch } from 'react-redux';
 import { Link, useNavigate } from 'react-router-dom';
-import { useContext, useState } from 'react/cjs/react.development';
-import { AuthContext } from '../../auth/AuthContext';
+import { useState } from 'react/cjs/react.development';
 
 import Button from '../../common/Button/Button';
 import Input from '../../common/Input/Input';
@@ -9,37 +9,21 @@ import {
   inputText,
   buttonText,
   localStorageKeys,
-  serverAddress,
 } from '../../constants';
+import { userLogin } from '../../store/user/actionCreators';
+import { performLogin } from '../../services';
 
 import './Login.css';
-
-async function performLogin(userEmail, userPassword) {
-  const loginData = {
-    name: null,
-    email: userEmail,
-    password: userPassword,
-  };
-
-  const response = await fetch(`${serverAddress}/login`, {
-    method: 'POST',
-    headers: {
-      'Content-Type': 'application/json',
-    },
-    body: JSON.stringify(loginData),
-  });
-  const responseJSON = await response.json();
-  return responseJSON;
-}
 
 export default function Login() {
   const [userEmail, setUserEmail] = useState('');
   const [userPassword, setUserPassword] = useState('');
   const navigate = useNavigate();
-  const loginContext = useContext(AuthContext);
+  const dispatch = useDispatch();
 
-  const saveToStorage = (userName, token) => {
+  const saveToStorage = (userName, email, token) => {
     localStorage.setItem(localStorageKeys.userName, userName);
+    localStorage.setItem(localStorageKeys.userEmail, email);
     localStorage.setItem(localStorageKeys.token, token);
   };
 
@@ -51,8 +35,12 @@ export default function Login() {
           alert(data.result);
           return;
         }
-        saveToStorage(data.user.name, data.result);
-        loginContext.toggle(true);
+        saveToStorage(data.user.name, data.user.email, data.result);
+        dispatch(userLogin({
+          name: data.user.name,
+          email: data.user.email,
+          token: data.result,
+        }));
         navigate('/courses');
       }).catch(err => {
         alert(`something went wrong\n${err.message}`);
