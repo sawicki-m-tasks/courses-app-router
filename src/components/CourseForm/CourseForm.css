@@ -1,0 +1,65 @@
+.newCourse {
+  border: 2px solid darkorchid;
+  padding: 10px;
+  display: flex;
+  flex-direction: column;
+}
+
+.courseDetailsTop {
+  display: flex;
+  flex-direction: row;
+  align-items: flex-end;
+  margin-bottom: 10px;
+  justify-content: space-between;
+}
+
+.courseDetailsTop .inputContainer {
+  max-width: 400px;
+  margin-right: 10px;
+}
+
+.authorDetails {
+  border: 2px solid black;
+  padding: 10px;
+  display: flex;
+  flex-direction: row;
+}
+
+.authorDetailsLeft {
+  flex: 1;
+  margin-right: 50px;
+}
+
+.authorDetailsRight {
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+}
+
+.authorDetailsRight .author {
+  display: flex;
+  flex-direction: row;
+  justify-content: space-between;
+  width: 70%;
+  margin-bottom: 5px;
+}
+
+.authorDetailsLeft > div {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+}
+
+.authorDetailsLeft .duration {
+  margin-top: 50px;
+}
+
+.authorDetailsLeft .duration span {
+  margin-top: 10px;
+  align-self: flex-start;
+}
+
+.createAuthor button {
+  margin-top: 20px;
+}
