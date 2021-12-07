@@ -1,4 +1,5 @@
-import { useContext } from 'react';
+/* eslint-disable react/jsx-no-constructed-context-values */
+import { useState } from 'react';
 import {
   BrowserRouter,
   Routes,
@@ -14,18 +15,18 @@ import Header from './components/Header/Header';
 import Login from './components/Login/Login';
 import Registration from './components/Registration/Registration';
 import Auth from './auth/Auth';
-import AuthContextProvider from './auth/AuthContextProvider';
 import LoginAuth from './auth/LoginAuth';
 import { AuthContext } from './auth/AuthContext';
+import checkIfUserLogged from './helpers/checkIfUserLogged';
 
 function App() {
-  const loginContext = useContext(AuthContext);
+  const [loginStatus, setLoginStatus] = useState(checkIfUserLogged());
   return (
-    <AuthContextProvider>
+    <AuthContext.Provider value={{ loginStatus, setLoginStatus }}>
       <BrowserRouter>
         <Routes>
           <Route path='/' element={<Header />}>
-            <Route index element={loginContext.status ? <Navigate to='/courses' /> : <Navigate to='/login' />} />
+            <Route index element={loginStatus ? <Navigate to='/courses' /> : <Navigate to='/login' />} />
             <Route path='registration' element={<Registration />} />
             <Route
               path='login'
@@ -63,7 +64,7 @@ function App() {
           <Route path='*' element={<Navigate to='/' />} />
         </Routes>
       </BrowserRouter>
-    </AuthContextProvider>
+    </AuthContext.Provider>
   );
 }
 

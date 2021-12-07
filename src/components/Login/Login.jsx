@@ -52,7 +52,7 @@ export default function Login() {
         return;
       }
       saveToStorage(result.user.name, result.result);
-      loginContext.toggle(true);
+      loginContext.setLoginStatus(true);
       navigate('/courses');
     } catch (err) {
       alert(`something went wrong\n${err.message}`);

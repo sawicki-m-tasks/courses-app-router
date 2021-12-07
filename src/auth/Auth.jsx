@@ -6,7 +6,7 @@ import { AuthContext } from './AuthContext';
 
 export default function Auth(props) {
   const loginContext = useContext(AuthContext);
-  if (!loginContext.logged) {
+  if (!loginContext.loginStatus) {
     return <Navigate to='/login' />;
   }
   return props.children;

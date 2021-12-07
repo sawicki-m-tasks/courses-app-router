@@ -21,7 +21,7 @@ export default function Header() {
     for (const key of Object.values(localStorageKeys)) {
       localStorage.removeItem(key);
     }
-    loginContext.toggle(false);
+    loginContext.setLoginStatus(false);
     navigate('/login');
   };
 
@@ -31,7 +31,7 @@ export default function Header() {
         <div className='logo'>
           <Logo />
         </div>
-        {loginContext.logged
+        {loginContext.loginStatus
         && (
         <div className='accountDetails'>
           <span>{userName}</span>
