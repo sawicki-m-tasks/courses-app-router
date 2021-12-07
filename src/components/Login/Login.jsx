@@ -43,20 +43,20 @@ export default function Login() {
     localStorage.setItem(localStorageKeys.token, token);
   };
 
-  const handleLogin = e => {
+  const handleLogin = async e => {
     e.preventDefault();
-    performLogin(userEmail, userPassword)
-      .then(data => {
-        if (!data.successful) {
-          alert(data.result);
-          return;
-        }
-        saveToStorage(data.user.name, data.result);
-        loginContext.toggle(true);
-        navigate('/courses');
-      }).catch(err => {
-        alert(`something went wrong\n${err.message}`);
-      });
+    try {
+      const result = await performLogin(userEmail, userPassword);
+      if (!result.successful) {
+        alert(result.result);
+        return;
+      }
+      saveToStorage(result.user.name, result.result);
+      loginContext.toggle(true);
+      navigate('/courses');
+    } catch (err) {
+      alert(`something went wrong\n${err.message}`);
+    }
   };
 
   const handleEmailInput = e => {

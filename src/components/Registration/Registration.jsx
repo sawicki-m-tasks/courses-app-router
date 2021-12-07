@@ -44,19 +44,18 @@ export default function Registration() {
     setUserPassword(e.target.value);
   };
 
-  const handleRegistration = e => {
+  const handleRegistration = async e => {
     e.preventDefault();
-    performRegistration(userName, userEmail, userPassword)
-      .then(data => {
-        if (!data.successful) {
-          alert(data.errors.join('\n'));
-          return;
-        }
-        navigate('/login');
-      })
-      .catch(err => {
-        alert(`something went wront\n${err.message}`);
-      });
+    try {
+      const result = await performRegistration(userName, userEmail, userPassword);
+      if (!result.successful) {
+        alert(result.errors.join('\n'));
+        return;
+      }
+      navigate('/login');
+    } catch (err) {
+      alert(`something went wrong\n${err.message}`);
+    }
   };
 
   return (
