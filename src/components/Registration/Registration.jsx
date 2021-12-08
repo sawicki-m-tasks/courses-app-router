@@ -1,0 +1,76 @@
+/* eslint-disable no-alert */
+import { Link, useNavigate } from 'react-router-dom';
+import { useState } from 'react/cjs/react.development';
+
+import Button from '../../common/Button/Button';
+import Input from '../../common/Input/Input';
+import { inputText, buttonText, serverAddress } from '../../constants';
+
+import './Registration.css';
+
+async function performRegistration(userName, userEmail, userPassword) {
+  const registrationData = {
+    name: userName,
+    email: userEmail,
+    password: userPassword,
+  };
+
+  const response = await fetch(`${serverAddress}/register`, {
+    method: 'POST',
+    headers: {
+      'Content-Type': 'application/json',
+    },
+    body: JSON.stringify(registrationData),
+  });
+  const responseJSON = await response.json();
+  return responseJSON;
+}
+
+export default function Registration() {
+  const [userName, setUserName] = useState('');
+  const [userEmail, setUserEmail] = useState('');
+  const [userPassword, setUserPassword] = useState('');
+  const navigate = useNavigate();
+
+  const handleNameInput = e => {
+    setUserName(e.target.value);
+  };
+
+  const handleEmailInput = e => {
+    setUserEmail(e.target.value);
+  };
+
+  const handlePasswordInput = e => {
+    setUserPassword(e.target.value);
+  };
+
+  const handleRegistration = async e => {
+    e.preventDefault();
+    try {
+      const result = await performRegistration(userName, userEmail, userPassword);
+      if (!result.successful) {
+        alert(result.errors.join('\n'));
+        return;
+      }
+      navigate('/login');
+    } catch (err) {
+      alert(`something went wrong\n${err.message}`);
+    }
+  };
+
+  return (
+    <section className='registration'>
+      <h1>Registration</h1>
+      <form onSubmit={handleRegistration}>
+        <Input type='text' id='userName' value={userName} onChange={handleNameInput} labelText={inputText.registrationName.label} placeholderText={inputText.registrationName.placeholder} />
+        <Input type='email' id='userEmail' value={userEmail} onChange={handleEmailInput} labelText={inputText.registrationEmail.label} placeholderText={inputText.registrationEmail.placeholder} />
+        <Input type='password' id='userPassword' value={userPassword} onChange={handlePasswordInput} labelText={inputText.registrationPassword.label} placeholderText={inputText.loginPassword.placeholder} />
+        <Button type='submit' buttonText={buttonText.register} />
+      </form>
+      <span>
+        If you have an account, you can&nbsp;
+        <Link to='/login'>login</Link>
+      </span>
+    </section>
+  );
+}
