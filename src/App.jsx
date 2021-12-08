@@ -20,7 +20,7 @@ import { AuthContext } from './auth/AuthContext';
 import checkIfUserLogged from './helpers/checkIfUserLogged';
 
 function App() {
-  const [loginStatus, setLoginStatus] = useState(checkIfUserLogged());
+  const [loginStatus, setLoginStatus] = useState(checkIfUserLogged);
   return (
     <AuthContext.Provider value={{ loginStatus, setLoginStatus }}>
       <BrowserRouter>
