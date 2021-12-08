@@ -13,9 +13,8 @@ import SearchBar from './components/SearchBar/SearchBar';
 import Button from '../../common/Button/Button';
 import formatDuration from '../../helpers/pipeDuration';
 import { buttonText } from '../../constants';
-import { fetchCourses, fetchAuthors } from '../../services';
-import { coursesFetched } from '../../store/courses/actionCreators';
-import { authorsFetched } from '../../store/authors/actionCreators';
+import { fetchAuthorsThunk } from '../../store/authors/thunk';
+import { fetchCoursesThunk } from '../../store/courses/thunk';
 
 export default function Courses() {
   const [searchPhrase, setSearchPhrase] = useState('');
@@ -24,16 +23,15 @@ export default function Courses() {
   const dispatch = useDispatch();
   const coursesList = useSelector(state => state.courses);
   const authorsList = useSelector(state => state.authors);
+  const user = useSelector(state => state.user);
 
   useEffect(() => {
     async function getData() {
       if (!authorsList) {
-        const a = await fetchAuthors();
-        dispatch(authorsFetched(a.result));
+        dispatch(fetchAuthorsThunk());
       }
       if (!coursesList) {
-        const c = await fetchCourses();
-        dispatch(coursesFetched(c.result));
+        dispatch(fetchCoursesThunk());
       }
     }
     getData();
@@ -60,9 +58,12 @@ export default function Courses() {
         <div className='searchBarContainer'>
           <SearchBar inputValue={inputValue} onSearch={search} onChange={handleSearchInput} />
         </div>
-        <div className='newCourseContainer'>
-          <Button buttonText={buttonText.addNewCourse} onClick={newCourseHandler} />
-        </div>
+        {user.role === 'admin'
+          && (
+          <div className='newCourseContainer'>
+            <Button buttonText={buttonText.addNewCourse} onClick={newCourseHandler} />
+          </div>
+          )}
       </section>
       <section className='coursesSection'>
         <div className='coursesListContainer'>

@@ -1,13 +1,14 @@
+/* eslint-disable no-unused-vars */
 /* eslint-disable max-len */
 /* eslint-disable consistent-return */
 /* eslint-disable array-callback-return */
 /* eslint-disable no-alert */
 /* eslint-disable import/no-extraneous-dependencies */
 import { useState } from 'react';
-import { useNavigate } from 'react-router';
+import { useNavigate, useParams } from 'react-router';
 import { useDispatch, useSelector } from 'react-redux';
 
-import './CreateCourse.css';
+import './CourseForm.css';
 
 import Button from '../../common/Button/Button';
 import Input from '../../common/Input/Input';
@@ -17,18 +18,23 @@ import {
   buttonText,
   inputText,
 } from '../../constants';
-import { authorAdd } from '../../store/authors/actionCreators';
-import { courseAdd } from '../../store/courses/actionCreators';
+import { createAuthorThunk } from '../../store/authors/thunk';
+import { createCourseThunk, updateCourseThunk } from '../../store/courses/thunk';
 
-export default function CreateCourse() {
-  const [selectedAuthorsID, setSelectedAuthorsID] = useState([]);
+export default function CourseForm() {
+  const params = useParams();
+  const prefill = Object.entries(params).length !== 0;
+  const course = useSelector(state => state.courses.find(courseEl => courseEl.id === params.courseId));
+  const authors = useSelector(state => state.authors);
+  const user = useSelector(state => state.user);
+
+  const [selectedAuthorsID, setSelectedAuthorsID] = useState(prefill ? course.authors : []);
   const [authorName, setAuthorName] = useState('');
-  const [duration, setDuration] = useState('');
-  const [title, setTitle] = useState('');
-  const [description, setDescription] = useState('');
+  const [duration, setDuration] = useState(prefill ? course.duration.toString() : '');
+  const [title, setTitle] = useState(prefill ? course.title : '');
+  const [description, setDescription] = useState(prefill ? course.description : '');
   const navigate = useNavigate();
   const dispatch = useDispatch();
-  const authors = useSelector(state => state.authors);
 
   const handleAddAuthor = id => {
     setSelectedAuthorsID([...selectedAuthorsID, id]);
@@ -45,17 +51,9 @@ export default function CreateCourse() {
       alert('Author\'s name should have at least 2 characters');
       return;
     }
-
-    dispatch(authorAdd(authorName));
-
-    setAuthorName('');
-  };
-
-  const clearInputs = () => {
-    setTitle('');
-    setDescription('');
-    setDuration('');
-    setSelectedAuthorsID([]);
+    dispatch(createAuthorThunk([authorName, user.token], () => {
+      setAuthorName('');
+    }));
   };
 
   const inputsNotCorrect = () => {
@@ -68,21 +66,31 @@ export default function CreateCourse() {
     return [duration, title, description].some(el => el === '');
   };
 
-  const handleCreateCourse = () => {
+  const getCourseData = () => ({
+    title,
+    description,
+    duration: parseInt(duration, 10),
+    authors: selectedAuthorsID,
+  });
+
+  const handleCreateCourse = async () => {
     if (inputsNotCorrect()) {
       alert('Please, fill all fields');
       return;
     }
-
-    dispatch(courseAdd({
-      title,
-      description,
-      duration,
-      authors: selectedAuthorsID,
+    dispatch(createCourseThunk(getCourseData(), user.token, () => {
+      navigate('/courses');
     }));
+  };
 
-    clearInputs();
-    navigate('/courses');
+  const handleCourseUpdate = async () => {
+    if (inputsNotCorrect()) {
+      alert('Please, fill all fields');
+      return;
+    }
+    dispatch(updateCourseThunk(getCourseData(), course.id, user.token, () => {
+      navigate('/courses');
+    }));
   };
 
   const handleAuthorNameChange = e => {
@@ -109,7 +117,7 @@ export default function CreateCourse() {
       <div className='courseDetails'>
         <div className='courseDetailsTop'>
           <Input type='text' onChange={handleTitleChange} value={title} labelText={inputText.courseTitle.label} placeholderText={inputText.courseTitle.placeholder} id='courseTitle' />
-          <Button buttonText={buttonText.createCourse} onClick={handleCreateCourse} />
+          <Button buttonText={prefill ? buttonText.updateCourse : buttonText.createCourse} onClick={prefill ? handleCourseUpdate : handleCreateCourse} />
         </div>
         <div className='courseDetailsBottom'>
           <Textarea onChange={handleDescriptionChange} inputValue={description} labelText={inputText.description.label} placeholderText={inputText.description.placeholder} id='courseDescription' />

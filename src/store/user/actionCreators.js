@@ -8,3 +8,8 @@ export const userLogin = data => ({
 export const userLogout = () => ({
   type: userActions.userLogout,
 });
+
+export const userSetRole = role => ({
+  type: userActions.userSetRole,
+  payload: role,
+});

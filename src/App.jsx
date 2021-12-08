@@ -1,3 +1,4 @@
+/* eslint-disable max-len */
 import {
   BrowserRouter,
   Routes,
@@ -9,7 +10,6 @@ import { useDispatch, useSelector } from 'react-redux';
 import './App.css';
 import CourseInfo from './components/CourseInfo/CourseInfo';
 import Courses from './components/Courses/Courses';
-import CreateCourse from './components/CreateCourse/CreateCourse';
 import Header from './components/Header/Header';
 import Login from './components/Login/Login';
 import Registration from './components/Registration/Registration';
@@ -18,6 +18,8 @@ import LoginAuth from './auth/LoginAuth';
 import { userLogin } from './store/user/actionCreators';
 import checkIfUserLogged from './helpers/checkIfUserLogged';
 import { localStorageKeys } from './constants';
+import PrivateRouter from './components/PrivateRouter/PrivateRouter';
+import CourseForm from './components/CourseForm/CourseForm';
 
 function App() {
   const user = useSelector(state => state.user);
@@ -28,6 +30,7 @@ function App() {
       name: localStorage.getItem(localStorageKeys.userName),
       email: localStorage.getItem(localStorageKeys.userEmail),
       token: localStorage.getItem(localStorageKeys.token),
+      role: localStorage.getItem(localStorageKeys.role),
     }));
   }
 
@@ -64,9 +67,17 @@ function App() {
           <Route
             path='courses/add'
             element={(
-              <Auth>
-                <CreateCourse />
-              </Auth>
+              <PrivateRouter>
+                <CourseForm />
+              </PrivateRouter>
+            )}
+          />
+          <Route
+            path='courses/update/:courseId'
+            element={(
+              <PrivateRouter>
+                <CourseForm />
+              </PrivateRouter>
             )}
           />
         </Route>

@@ -63,6 +63,7 @@ export const buttonText = {
   addNewCourse: 'Add new course',
   login: 'Login',
   register: 'Register',
+  updateCourse: 'Update course',
 };
 
 export const inputText = {
@@ -112,6 +113,7 @@ export const localStorageKeys = {
   userName: 'courses_app_USERNAME',
   userEmail: 'courses_app_EMAIL',
   token: 'courses_app_TOKEN',
+  role: 'courses_app_ROLE',
 };
 
 export const serverAddress = 'http://127.0.0.1:3000';

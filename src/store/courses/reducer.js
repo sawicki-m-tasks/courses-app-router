@@ -1,18 +1,24 @@
 /* eslint-disable default-param-last */
-import generateCurrentDate from '../../helpers/dateGenerator';
 import { coursesActions } from './actionTypes';
-import { generateId } from '../../helpers/idGenerator';
 
 const initialState = null;
 
 export default function coursesReducer(state = initialState, action) {
   switch (action.type) {
+    case coursesActions.courseUpdate: {
+      return state.map(el => {
+        if (el.id === action.payload.id) {
+          return action.payload;
+        }
+        return el;
+      });
+    }
     case coursesActions.courseAdd: {
       return [...state, {
-        id: generateId(),
+        id: action.payload.id,
         title: action.payload.title,
         description: action.payload.description,
-        creationDate: generateCurrentDate(),
+        creationDate: action.payload.creationDate,
         duration: action.payload.duration,
         authors: action.payload.authors,
       }];

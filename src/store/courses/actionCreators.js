@@ -14,3 +14,8 @@ export const courseAdd = data => ({
   type: coursesActions.courseAdd,
   payload: data,
 });
+
+export const courseUpdate = data => ({
+  type: coursesActions.courseUpdate,
+  payload: data,
+});

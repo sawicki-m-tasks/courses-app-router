@@ -1,6 +1,7 @@
+/* eslint-disable no-unused-vars */
 /* eslint-disable no-alert */
 import { useDispatch } from 'react-redux';
-import { Link, useNavigate } from 'react-router-dom';
+import { Link } from 'react-router-dom';
 import { useState } from 'react/cjs/react.development';
 
 import Button from '../../common/Button/Button';
@@ -8,43 +9,20 @@ import Input from '../../common/Input/Input';
 import {
   inputText,
   buttonText,
-  localStorageKeys,
 } from '../../constants';
-import { userLogin } from '../../store/user/actionCreators';
-import { performLogin } from '../../services';
+
+import { userLoginThunk } from '../../store/user/thunk';
 
 import './Login.css';
 
 export default function Login() {
   const [userEmail, setUserEmail] = useState('');
   const [userPassword, setUserPassword] = useState('');
-  const navigate = useNavigate();
   const dispatch = useDispatch();
 
-  const saveToStorage = (userName, email, token) => {
-    localStorage.setItem(localStorageKeys.userName, userName);
-    localStorage.setItem(localStorageKeys.userEmail, email);
-    localStorage.setItem(localStorageKeys.token, token);
-  };
-
-  const handleLogin = e => {
+  const handleLogin = async e => {
     e.preventDefault();
-    performLogin(userEmail, userPassword)
-      .then(data => {
-        if (!data.successful) {
-          alert(data.result);
-          return;
-        }
-        saveToStorage(data.user.name, data.user.email, data.result);
-        dispatch(userLogin({
-          name: data.user.name,
-          email: data.user.email,
-          token: data.result,
-        }));
-        navigate('/courses');
-      }).catch(err => {
-        alert(`something went wrong\n${err.message}`);
-      });
+    dispatch(userLoginThunk([userEmail, userPassword]));
   };
 
   const handleEmailInput = e => {

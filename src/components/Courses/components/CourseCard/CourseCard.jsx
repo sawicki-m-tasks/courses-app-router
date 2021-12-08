@@ -1,24 +1,30 @@
+/* eslint-disable no-unused-vars */
 /* eslint-disable react/forbid-prop-types */
 import { useNavigate } from 'react-router-dom';
 import PropTypes from 'prop-types';
-import { useDispatch } from 'react-redux';
+import { useDispatch, useSelector } from 'react-redux';
 
 import Button from '../../../../common/Button/Button';
 import { buttonText } from '../../../../constants';
-import { courseDeleted } from '../../../../store/courses/actionCreators';
+import { deleteCourseThunk } from '../../../../store/courses/thunk';
 
 import './CourseCard.css';
 
 export default function CourseCard(props) {
   const navigate = useNavigate();
   const dispatch = useDispatch();
+  const user = useSelector(state => state.user);
 
   const showCourseDetails = () => {
     navigate(`/courses/${props.id}`);
   };
 
-  const deleteCourse = () => {
-    dispatch(courseDeleted(props.id));
+  const handleCourseDelete = async () => {
+    dispatch(deleteCourseThunk(props.id, user.token));
+  };
+
+  const update = () => {
+    navigate(`/courses/update/${props.id}`);
   };
 
   return (
@@ -43,8 +49,13 @@ export default function CourseCard(props) {
         </p>
         <div className='courseCardButtons'>
           <Button buttonText={buttonText.showCourse} onClick={showCourseDetails} />
-          <Button buttonText='Update' onClick={() => {}} />
-          <Button buttonText='Delete' onClick={deleteCourse} />
+          {user.role === 'admin'
+            && (
+            <>
+              <Button buttonText='Update' onClick={update} />
+              <Button buttonText='Delete' onClick={handleCourseDelete} />
+            </>
+            )}
         </div>
       </div>
     </div>
