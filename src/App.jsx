@@ -1,4 +1,6 @@
+/* eslint-disable no-unused-vars */
 /* eslint-disable max-len */
+import { useEffect } from 'react';
 import {
   BrowserRouter,
   Routes,
@@ -21,24 +23,35 @@ import { localStorageKeys } from './constants';
 import PrivateRouter from './components/PrivateRouter/PrivateRouter';
 import CourseForm from './components/CourseForm/CourseForm';
 
-function App() {
+function useLoginStatus() {
   const user = useSelector(state => state.user);
   const dispatch = useDispatch();
 
-  if (checkIfUserLogged() && !user.isAuth) {
-    dispatch(userLogin({
-      name: localStorage.getItem(localStorageKeys.userName),
-      email: localStorage.getItem(localStorageKeys.userEmail),
-      token: localStorage.getItem(localStorageKeys.token),
-      role: localStorage.getItem(localStorageKeys.role),
-    }));
-  }
+  useEffect(() => {
+    if (checkIfUserLogged() && !user.isAuth) {
+      dispatch(userLogin({
+        name: localStorage.getItem(localStorageKeys.userName),
+        email: localStorage.getItem(localStorageKeys.userEmail),
+        token: localStorage.getItem(localStorageKeys.token),
+        role: localStorage.getItem(localStorageKeys.role),
+      }));
+    }
+  }, []);
+
+  return user.isAuth;
+}
+
+function App() {
+  const user = useSelector(state => state.user);
+  const dispatch = useDispatch();
+  const loginStatus = useLoginStatus();
 
   return (
     <BrowserRouter>
       <Routes>
         <Route path='/' element={<Header />}>
-          <Route index element={user.isAuth ? <Navigate to='/courses' /> : <Navigate to='/login' />} />
+          {/* <Route index element={user.isAuth ? <Navigate to='/courses' /> : <Navigate to='/login' />} /> */}
+          <Route index element={loginStatus ? <Navigate to='/courses' /> : <Navigate to='/login' />} />
           <Route path='registration' element={<Registration />} />
           <Route
             path='login'
