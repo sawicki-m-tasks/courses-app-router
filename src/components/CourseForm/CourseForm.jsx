@@ -4,7 +4,7 @@
 /* eslint-disable array-callback-return */
 /* eslint-disable no-alert */
 /* eslint-disable import/no-extraneous-dependencies */
-import { useState } from 'react';
+import React, { useState } from 'react';
 import { useNavigate, useParams } from 'react-router';
 import { useDispatch, useSelector } from 'react-redux';
 
@@ -113,7 +113,7 @@ export default function CourseForm() {
   };
 
   return (
-    <div className='newCourse'>
+    <div data-testid='courseForm' className='newCourse'>
       <div className='courseDetails'>
         <div className='courseDetailsTop'>
           <Input type='text' onChange={handleTitleChange} value={title} labelText={inputText.courseTitle.label} placeholderText={inputText.courseTitle.placeholder} id='courseTitle' />
@@ -148,8 +148,8 @@ export default function CourseForm() {
             authors.map(author => {
               if (selectedAuthorsID.indexOf(author.id) === -1) {
                 return (
-                  <div key={author.id} authorid={author.id} className='author'>
-                    <span>{author.name}</span>
+                  <div data-testid='courseAuthorAvailable' key={author.id} authorid={author.id} className='author'>
+                    <span data-testid='courseAuthorNameAvailable'>{author.name}</span>
                     <Button buttonText={buttonText.addAuthor} onClick={() => handleAddAuthor(author.id)} />
                   </div>
                 );
@@ -162,8 +162,8 @@ export default function CourseForm() {
           {selectedAuthorsID.map(authorID => {
             const author = authors.find(auth => auth.id === authorID);
             return (
-              <div key={author.id} authorid={author.id} className='author'>
-                <span>{author.name}</span>
+              <div data-testid='courseAuthorSelected' key={author.id} authorid={author.id} className='author'>
+                <span data-testid='courseAuthorNameSelected'>{author.name}</span>
                 <Button buttonText='Delete author' onClick={handleDeleteAuthor} />
               </div>
             );

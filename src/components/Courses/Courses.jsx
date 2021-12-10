@@ -2,7 +2,7 @@
 /* eslint-disable consistent-return */
 /* eslint-disable max-len */
 /* eslint-disable array-callback-return */
-import { useEffect, useState } from 'react';
+import React, { useEffect, useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { useDispatch, useSelector } from 'react-redux';
 
@@ -11,7 +11,6 @@ import './Courses.css';
 import CourseCard from './components/CourseCard/CourseCard';
 import SearchBar from './components/SearchBar/SearchBar';
 import Button from '../../common/Button/Button';
-import formatDuration from '../../helpers/pipeDuration';
 import { buttonText } from '../../constants';
 import { fetchAuthorsThunk } from '../../store/authors/thunk';
 import { fetchCoursesThunk } from '../../store/courses/thunk';
@@ -61,7 +60,7 @@ export default function Courses() {
         {user.role === 'admin'
           && (
           <div className='newCourseContainer'>
-            <Button buttonText={buttonText.addNewCourse} onClick={newCourseHandler} />
+            <Button data_testid='coursesCreateNewCourseButton' buttonText={buttonText.addNewCourse} onClick={newCourseHandler} />
           </div>
           )}
       </section>
@@ -70,17 +69,15 @@ export default function Courses() {
           {
             coursesList && coursesList.map(course => {
               if (course.title.toLowerCase().includes(searchPhrase) || course.id.toLowerCase().includes(searchPhrase)) {
-                const duration = formatDuration(course.duration);
-                const authors = course.authors.map(id => authorsList.find(author => author.id === id).name);
                 return (
                   <CourseCard
                     key={course.id}
                     id={course.id}
                     title={course.title}
-                    duration={duration}
+                    duration={course.duration}
                     creationDate={course.creationDate}
                     description={course.description}
-                    authors={authors}
+                    authors={course.authors}
                   />
                 );
               }

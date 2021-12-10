@@ -1,5 +1,7 @@
+/* eslint-disable max-len */
 /* eslint-disable no-unused-vars */
 /* eslint-disable react/forbid-prop-types */
+import React from 'react';
 import { useNavigate } from 'react-router-dom';
 import PropTypes from 'prop-types';
 import { useDispatch, useSelector } from 'react-redux';
@@ -9,11 +11,13 @@ import { buttonText } from '../../../../constants';
 import { deleteCourseThunk } from '../../../../store/courses/thunk';
 
 import './CourseCard.css';
+import formatDuration from '../../../../helpers/pipeDuration';
 
 export default function CourseCard(props) {
   const navigate = useNavigate();
   const dispatch = useDispatch();
   const user = useSelector(state => state.user);
+  const authors = useSelector(state => state.authors.filter(auth => props.authors.indexOf(auth.id) !== -1));
 
   const showCourseDetails = () => {
     navigate(`/courses/${props.id}`);
@@ -28,32 +32,32 @@ export default function CourseCard(props) {
   };
 
   return (
-    <div className='courseCard'>
+    <div data-testid='courseCard' className='courseCard'>
       <div className='courseCardDescription'>
-        <h3>{props.title}</h3>
-        <p>{props.description}</p>
+        <h3 data-testid='courseCardTitle'>{props.title}</h3>
+        <p data-testid='courseCardDescription'>{props.description}</p>
       </div>
       <div className='courseCardDetails'>
-        <p className='authors'>
+        <p data-testid='courseCardAuthors' className='authors'>
           <b>Authors:&nbsp;</b>
-          {props.authors.join(', ')}
+          {authors.map(author => author.name).join(', ')}
         </p>
-        <p>
+        <p data-testid='courseCardDuration'>
           <b>Duration:&nbsp;</b>
-          {props.duration}
+          {formatDuration(props.duration)}
           &nbsp;hours
         </p>
-        <p>
+        <p data-testid='courseCardCreationDate'>
           <b>Created:&nbsp;</b>
-          {props.creationDate.replaceAll('/', '.')}
+          {props.creationDate.replace(/\//g, '.')}
         </p>
         <div className='courseCardButtons'>
           <Button buttonText={buttonText.showCourse} onClick={showCourseDetails} />
           {user.role === 'admin'
             && (
             <>
-              <Button buttonText='Update' onClick={update} />
-              <Button buttonText='Delete' onClick={handleCourseDelete} />
+              <Button data_testid='courseCardUpdateButton' buttonText='Update' onClick={update} />
+              <Button data_testid='courseCardDeleteButton' buttonText='Delete' onClick={handleCourseDelete} />
             </>
             )}
         </div>
@@ -67,6 +71,6 @@ CourseCard.propTypes = {
   title: PropTypes.string.isRequired,
   description: PropTypes.string.isRequired,
   authors: PropTypes.array.isRequired,
-  duration: PropTypes.string.isRequired,
+  duration: PropTypes.number.isRequired,
   creationDate: PropTypes.string.isRequired,
 };

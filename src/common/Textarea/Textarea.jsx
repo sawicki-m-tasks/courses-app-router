@@ -1,5 +1,6 @@
 import './Textarea.css';
 
+import React from 'react';
 import PropTypes from 'prop-types';
 
 export default function Textarea(props) {

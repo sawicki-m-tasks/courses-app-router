@@ -71,8 +71,6 @@ export async function getUserRole(token) {
 }
 
 export async function addAuthor(author, token) {
-  console.log('author: ', author);
-  console.log('token: ', token);
   const authorData = {
     name: author,
   };

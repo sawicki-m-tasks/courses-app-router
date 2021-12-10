@@ -1,6 +1,7 @@
 /* eslint-disable no-unused-vars */
 /* eslint-disable no-restricted-syntax */
 /* eslint-disable import/no-extraneous-dependencies */
+import React from 'react';
 import { useDispatch, useSelector } from 'react-redux';
 import {
   Outlet,
