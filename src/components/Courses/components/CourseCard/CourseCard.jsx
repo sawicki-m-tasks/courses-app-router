@@ -39,16 +39,16 @@ export default function CourseCard(props) {
       </div>
       <div className='courseCardDetails'>
         <p data-testid='courseCardAuthors' className='authors'>
-          <b>Authors:&nbsp;</b>
+          <b>Authors: </b>
           {authors.map(author => author.name).join(', ')}
         </p>
         <p data-testid='courseCardDuration'>
-          <b>Duration:&nbsp;</b>
-          {formatDuration(props.duration)}
-          &nbsp;hours
+          <b>Duration: </b>
+          {`${formatDuration(props.duration)} `}
+          hours
         </p>
         <p data-testid='courseCardCreationDate'>
-          <b>Created:&nbsp;</b>
+          <b>Created: </b>
           {props.creationDate.replace(/\//g, '.')}
         </p>
         <div className='courseCardButtons'>
