@@ -1,7 +1,7 @@
 import React from "react";
 import { Provider } from "react-redux";
 import { render, screen } from '@testing-library/react';
-import '@testing-library/jest-dom';
+import 'regenerator-runtime/runtime';
 
 import { mockedStoreCourses, mockedStoreUserAdmin, mockedStoreUserNotAdmin } from '../../../../../store/mockStore';
 import CourseCard from '../CourseCard';
@@ -30,7 +30,6 @@ test('CourseCard should display all course informations', () => {
   render(
     <Provider store={mockedStoreCourses}>
       <CourseCard
-        key='0'
         id='0'
         title={course.title}
         duration={course.duration}
@@ -42,16 +41,15 @@ test('CourseCard should display all course informations', () => {
   );
   expect(screen.getByTestId('courseCardTitle').textContent).toEqual(course.title);
   expect(screen.getByTestId('courseCardDescription').textContent).toEqual(course.description);
-  expect(screen.getByTestId('courseCardDuration').textContent).toEqual(`Duration:\xa0${formatDuration(course.duration)}\xa0hours`);
-  expect(screen.getByTestId('courseCardAuthors').textContent).toEqual(`Authors:\xa0${authors.name}`);
-  expect(screen.getByTestId('courseCardCreationDate').textContent).toEqual(`Created:\xa0${course.creationDate.replace(/\//g, '.')}`);
+  expect(screen.getByTestId('courseCardDuration').textContent).toBe(`Duration: ${formatDuration(course.duration)} hours`);
+  expect(screen.getByTestId('courseCardAuthors').textContent).toEqual(`Authors: ${authors.name}`);
+  expect(screen.getByTestId('courseCardCreationDate').textContent).toEqual(`Created: ${course.creationDate.replace(/\//g, '.')}`);
 });
 
 test('CourseCard should have additional buttons for admin user', () => {
   render(
     <Provider store={mockedStoreUserAdmin}>
       <CourseCard
-        key='0'
         id='0'
         title={course.title}
         duration={course.duration}
@@ -65,11 +63,10 @@ test('CourseCard should have additional buttons for admin user', () => {
   expect(screen.getByTestId('courseCardDeleteButton')).toBeInTheDocument();
 });
 
-test('CourseCard should not have additional buttons for not admin', () => {
+test('CourseCard should not have additional buttons for non admin user', () => {
   render(
     <Provider store={mockedStoreUserNotAdmin}>
       <CourseCard
-        key='0'
         id='0'
         title={course.title}
         duration={course.duration}
